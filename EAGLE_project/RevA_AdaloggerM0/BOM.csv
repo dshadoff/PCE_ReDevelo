@@ -1,0 +1,15 @@
+Qty,Designator,Footprint,Comment,LCSC Part # (optional),Description (optional)
+1,JP3,1X12,Do not mount,Do not mount,Multi connection point. Often used as Generic Header-pin footprint for 0.1 inch spaced/style header connections
+1,JP1,1X16,Do not mount,Do not mount,Multi connection point. Often used as Generic Header-pin footprint for 0.1 inch spaced/style header connections
+7,"C1, C2, C6, C7, C8, C9, C10",C0603,0.1uF 50V,C14663,Yageo CC0603KRX7R9BB104  100NF 50V 0603
+8,"R5, R6, R7, R8, R9, R10, R11, R12",R0603,330,C23138,Uniroyal Elec  0603WAF3300T5E 0603
+4,"R1, R2, R3, R4",R0603,47K,C25819,Uniroyal Elec  0603WAF4702T5E 0603
+1,IC3,SOIC-16_3.9x9.9x1.27P,SN74HC157DR,C6823,74HC SOIC-16_150mil Signal Switches / Encoders & Decoders / Multiplexers 
+2,"J2, J3",MD80SGK,Do not mount,Do not mount,"Circular DIN Connectors mini-DIN, 8P jack, rt, through hole, full shield"
+3,"IC1, IC2, IC4",VSSOP-8_2.0x2.3x0.5P,SN74LVC2T45DCUR,C15741,"2-Bit Bus Transceiver, Translation VSSOP-8_2x2.3x05P SN74LVC2T45DCTR, Voltage Level Translator, Bus Transceiver LVC, 3-State 1.65"
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,
+,,,,,

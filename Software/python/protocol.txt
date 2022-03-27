@@ -1,0 +1,51 @@
+
+dv_set_bank
+-----------
+in: 2, page, bank (all char)
+out: err
+
+dv_get_bank
+-----------
+in: 3
+out: success, 8-byte block
+
+dv_get_ram
+----------
+in: 4, addr_h, addr_l, len_h, len_l (char)
+out: success, "len"-byte block
+
+dv_set_ram
+----------
+in: 5, addr_h, addr_l, len_h, len_l (char), "len"-byte block(*) -> chunks of up to 512 bytes
+out: success
+
+dv_get_vram
+-----------
+in: 6, addr_h, addr_l, len_h, len_l (char) -> chunks of up to 512 bytes
+out: success, "len"-byte block
+
+dv_set_vram
+-----------
+in: 7, addr_h, addr_l, len_h, len_l (char), "len"-byte block(*) -> chunks of up to 512 bytes
+out: success
+
+dv_get_color
+------------
+in: 8, addr_h, addr_l, len_h, len_l (char)
+out: success, "len"-byte block
+
+dv_set_color
+------------
+in: 9, addr_h, addr_l, len_h, len_l (char), "len"-byte block
+out: success
+
+dv_exec
+-------
+in: 10, addr_h, addr_l
+out: success
+
+dv_read_cd
+----------
+in: 12, sector_h, sector_m, sector_l
+out: success, 2048-byte block
+

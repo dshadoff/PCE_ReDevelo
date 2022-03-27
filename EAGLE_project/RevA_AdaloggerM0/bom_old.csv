@@ -1,0 +1,20 @@
+﻿Qty,Designator,Footprint,Comment,LCSC Part # (optional),Description (optional)
+1,J1,"CONN_08"";1X08""",Do not mount,Do not mount,Multi connection point. Often used as Generic Header-pin footprint for 0.1 inch spaced/style header connections
+2,"J2, J3",MD80SGK,Do not mount,Do not mount,"Circular DIN Connectors mini-DIN, 8P jack, rt, through hole, full shield"
+2,"J4, J5",1X12,Do not mount,Do not mount,Multi connection point. Often used as Generic Header-pin footprint for 0.1 inch spaced/style header connections
+1,J6,1X02,Do not mount,Do not mount,Multi connection point. Often used as Generic Header-pin footprint for 0.1 inch spaced/style header connections
+1,J7,1X06_NO_SILK,Do not mount,Do not mount,Multi connection point. Often used as Generic Header-pin footprint for 0.1 inch spaced/style header connections
+8,"C1, C2, C6, C7, C8, C9, C10, C11",C0603,0.1uF 50V,C14663,Yageo CC0603KRX7R9BB104  100NF 50V 0603
+2,"C3, C4",C0603,1uF 50V,C15849,Samsung CL10A105KB8NNNC  1uF 50V 0603
+1,C5,C0805,10uF 25V,C15850,Samsung CL21A106KAYNNNE  10uF 25V 0805
+1,LED1,LEDC1608X60N,Yellow,C72038,Everlight Elec 19-213/Y2C-CQ2R2L/3T(CY)  0603
+1,LED2,LEDC1608X50N,Green,C72043,Everlight Elec 19-217/GHC-YR1S2/3T  0603
+1,LED3,LEDC1608X50N,Red,C2286,Hubei KENTO Elec  KT-0603R  0603
+1,R1,R0603,4.7K,C23162,Uniroyal Elec  0603WAF4701T5E 0603
+5,"R2, R21, R22, R23, R24",R0603,47K,C25819,Uniroyal Elec  0603WAF4702T5E 0603
+2,"R3, R15",R0603,3.3K,C22978,Uniroyal Elec  0603WAF3301T5E 0603
+5,"R13, R16, R18, R19, R20",R0603,330,C23138,Uniroyal Elec  0603WAF3300T5E 0603
+3,"IC1, IC2, IC3",SM-8_2.8x3.0x0.65P,SN74LVC2T45DCTR,C22672,"2-Bit Bus Transceiver, Translation SSOP8 SN74LVC2T45DCTR, Voltage Level Translator, Bus Transceiver LVC, 3-State 1.65"
+1,IC4,SOIC-8_3.9x4.9x1.27P,FM25V10-G,C44173,"F-RAM,128KB,SPI,40MHz,3V,SOIC8 FM25V10-G Serial-SPI FRAM Memory, 1Mbit, 2  3.6 V 8-Pin SOIC"
+1,IC5,SOIC-16_3.9x9.9x1.27P,SN74HC157D,C6823,Quadruple 2-Line To 1-Line Data Selectors/Multiplexers
+1,IC6,SOT-23-3,MCP1700T-3302E_TT,C39051,LDO voltage regulator 250mA Isupply 1uA

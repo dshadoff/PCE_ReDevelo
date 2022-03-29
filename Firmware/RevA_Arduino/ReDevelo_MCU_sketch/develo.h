@@ -5,10 +5,10 @@
 
 /* command status */
 #define DV_OK			 0
-#define DV_ERR			-1
-#define DV_CRC_ERR		-2
-#define DV_TIMEOUT_ERR	-3
-#define DV_INTERNAL_ERR	-99
+#define DV_ERR			-1            //  comes back as 0xFF
+#define DV_CRC_ERR		-2          //  comes back as 0xFE
+#define DV_TIMEOUT_ERR	-3        //  comes back as 0xFD
+#define DV_INTERNAL_ERR	-99       //  comes back as 0x9D
 #define DV_CMD  0
 #define DV_SEND 1
 #define DV_RECV 2

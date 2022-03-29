@@ -17,57 +17,28 @@ if len(sys.argv) <= 1:
     print("Usage: redev_getrom <filename>")
     exit()
 
-print("Use filename: ", sys.argv[1])
-print()
-
-
 f = open(sys.argv[1], "wb")
 
 ret, data = develo.getbank(ser)
 savebank = data[4]
 develo.chkret(ret, "initial getbank")
-hexdump(data)
-
-print("savebank=",end='')
-print('{0:0{1}X}'.format(savebank,2))
-print()
 
 banknum = 0
 while (banknum < 32):
+    print("Fetching Bank ",end='')
+    print('{0:0{1}X}'.format(banknum,2))
+
     ret = develo.setbank(ser, 4, banknum)
     develo.chkret(ret, "setbank (4, banknum)")
-    print("Setbank 4, banknum = OK",flush=True)
 
-#develo.pr_from_port(ser)
-
-    ret, data1 = develo.getbank(ser)
-    develo.chkret(ret, "second getbank")
-    hexdump(data1)
-    print()
-
-    baseaddr = 0x8000
-    ret, data2 = develo.getram(ser, baseaddr, 8192)
+    ret, data2 = develo.getram(ser, 0x8000, 8192)
     develo.chkret(ret, "getram")
-    hexdump(data2, baseaddr)
     f.write(data2)
-    print()
 
     banknum = banknum + 1
 
-
-
 ret = develo.setbank(ser, 4, savebank)
 develo.chkret(ret, "setbank (revert)")
-print("Setbank 4, savebank = OK",flush=True)
-
-ret, data = develo.getbank(ser)
-develo.chkret(ret,"final getbank")
-hexdump(data)
-print()
-
-ret = develo.err(ser)
-develo.chkret(ret,"err")
-print("force_ OK",flush=True)
 
 f.close()
 ser.close()

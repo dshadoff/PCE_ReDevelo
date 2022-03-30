@@ -226,6 +226,76 @@ int i;
   }
 }
 
+void serial_getvram() {
+int retcode;
+unsigned char buf[1024];
+int addr_h, addr_l, len_h, len_l;
+int addr, len;
+int i;
+
+  while (!Serial.available());    // need to wait for data to be available
+  addr_h = Serial.read();
+  while (!Serial.available());    // need to wait for data to be available
+  addr_l = Serial.read();
+
+  while (!Serial.available());    // need to wait for data to be available
+  len_h = Serial.read();
+  while (!Serial.available());    // need to wait for data to be available
+  len_l = Serial.read();
+
+  addr = (addr_h << 8) + addr_l;
+  len  = (len_h  << 8) + len_l;
+  
+  if (len > 512) len = 512;
+
+  retcode = dv_get_vram(buf, addr, len);
+  if (retcode != DV_OK) {
+    Serial.write(retcode);
+  }
+  else {
+    Serial.write(retcode);
+    for (i = 0 ; i < len; i++) {
+      Serial.write(*(buf+i));
+    }
+    Serial.flush();
+  }
+}
+
+void serial_getcolor() {
+int retcode;
+unsigned char buf[1024];
+int addr_h, addr_l, len_h, len_l;
+int addr, len;
+int i;
+
+  while (!Serial.available());    // need to wait for data to be available
+  addr_h = Serial.read();
+  while (!Serial.available());    // need to wait for data to be available
+  addr_l = Serial.read();
+
+  while (!Serial.available());    // need to wait for data to be available
+  len_h = Serial.read();
+  while (!Serial.available());    // need to wait for data to be available
+  len_l = Serial.read();
+
+  addr = (addr_h << 8) + addr_l;
+  len  = (len_h  << 8) + len_l;
+  
+  if (len > 512) len = 512;
+
+  retcode = dv_get_color(buf, addr, len);
+  if (retcode != DV_OK) {
+    Serial.write(retcode);
+  }
+  else {
+    Serial.write(retcode);
+    for (i = 0 ; i < len; i++) {
+      Serial.write(*(buf+i));
+    }
+    Serial.flush();
+  }
+}
+
 void serial_error() {
     Serial.write(DV_INTERNAL_ERR);
     Serial.flush();
@@ -257,6 +327,18 @@ static bool led_state = LOW;
 
     case 'D':   // get ram
         serial_getram();
+        led_state = led_state ? LOW : HIGH;
+        digitalWrite(LED_Pin, led_state);
+        break;
+
+    case 'F':   // get vram
+        serial_getvram();
+        led_state = led_state ? LOW : HIGH;
+        digitalWrite(LED_Pin, led_state);
+        break;
+
+    case 'H':   // get color
+        serial_getcolor();
         led_state = led_state ? LOW : HIGH;
         digitalWrite(LED_Pin, led_state);
         break;

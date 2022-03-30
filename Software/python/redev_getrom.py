@@ -4,10 +4,7 @@ import serial
 import develo
 from hextools import *
 
-if 'DEVELO_PORT' not in os.environ:
-    sys.exit("DEVELO_PORT not defined")
-
-comport = os.environ.get('DEVELO_PORT')
+comport = develo.get_portnum()
 print("Using serial port: ", comport)
 ser = serial.Serial(comport, 19200, timeout=1)
 
@@ -20,8 +17,9 @@ if len(sys.argv) <= 1:
 f = open(sys.argv[1], "wb")
 
 ret, data = develo.getbank(ser)
-savebank = data[4]
 develo.chkret(ret, "initial getbank")
+
+savebank = data[4]
 
 banknum = 0
 while (banknum < 32):

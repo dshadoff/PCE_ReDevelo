@@ -4,14 +4,10 @@ import serial
 import develo
 from hextools import *
 
-
-if 'DEVELO_PORT' not in os.environ:
-    sys.exit("DEVELO_PORT not defined")
-
-comport = os.environ.get('DEVELO_PORT')
+comport = develo.get_portnum()
 print("Using serial port: ", comport)
 
-ser = serial.Serial(comport, 19200, timeout=0.1)
+ser = serial.Serial(comport, 19200, timeout=0.5)
 
 ret, data = develo.getbank(ser)
 develo.chkret(ret, "getbank")

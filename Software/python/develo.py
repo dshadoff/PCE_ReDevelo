@@ -12,8 +12,8 @@ def get_portnum():
 def pr_from_port(port):
     while 1:
         byte = port.read(1)
-        print(byte.decode('utf-8'),end='',flush=True)
-#        print(byte,end='',flush=True)
+#       print(byte.decode('utf-8'),end='',flush=True)
+        print(byte,end='',flush=True)
 
 #
 # Develo command to set a specific bank register
@@ -80,6 +80,41 @@ def getram(port, addr, numbytes):
     return ret, allmem
 
 #
+# Develo command to set memory
+#   returns a bytes object
+#
+#  NOTE: Each remote fetch limited to 512 bytes
+#
+def setram_chunk(port, addr, mem):
+    port.write(b'E')
+    port.write(addr.to_bytes(2,'big'))
+    size = len(mem)
+    port.write(size.to_bytes(2,'big'))
+    port.flush()
+    port.write(mem)
+    port.flush()
+    ret = port.read(1)
+    return ret
+
+def setram(port, addr, allmem):
+    assert len(allmem) != 0, "setram: numbytes should be non-zero"
+    start = 0
+    end = len(allmem)
+    numbytes = end - start
+    while numbytes > 0:
+        chunksize = min(numbytes, 512)
+        mem = allmem[start:(start+chunksize)]
+        ret = setram_chunk(port, addr, mem)
+        if ret == b'\x00':
+            start = start + chunksize
+            addr = addr + chunksize
+            numbytes = end - start
+        else:
+            break
+    return ret
+
+
+#
 # Develo command to get VRAM
 #   returns a bytes object
 #
@@ -117,6 +152,40 @@ def getvram(port, addr, numbytes):
     return ret, allmem
 
 #
+# Develo command to set memory
+#   returns a bytes object
+#
+#  NOTE: Each remote fetch limited to 512 bytes
+#
+def setvram_chunk(port, addr, mem):
+    port.write(b'G')
+    port.write(addr.to_bytes(2,'big'))
+    size = len(mem)
+    port.write(size.to_bytes(2,'big'))
+    port.flush()
+    port.write(mem)
+    port.flush()
+    ret = port.read(1)
+    return ret
+
+def setvram(port, addr, allmem):
+    assert len(allmem) != 0, "setvram: numbytes should be non-zero"
+    start = 0
+    end = len(allmem)
+    numbytes = end - start
+    while numbytes > 0:
+        chunksize = min(numbytes, 512)
+        mem = allmem[start:(start+chunksize)]
+        ret = setvram_chunk(port, addr, mem)
+        if ret == b'\x00':
+            start = start + chunksize
+            addr = addr + int(chunksize/2)
+            numbytes = end - start
+        else:
+            break
+    return ret
+
+#
 # Develo command to get palette data
 #   returns a bytes object
 #
@@ -152,6 +221,40 @@ def getpal(port, addr, numbytes):
             allmem = b'\x00'
             break
     return ret, allmem
+
+#
+# Develo command to set memory
+#   returns a bytes object
+#
+#  NOTE: Each remote fetch limited to 512 bytes
+#
+def setpal_chunk(port, addr, mem):
+    port.write(b'I')
+    port.write(addr.to_bytes(2,'big'))
+    size = len(mem)
+    port.write(size.to_bytes(2,'big'))
+    port.flush()
+    port.write(mem)
+    port.flush()
+    ret = port.read(1)
+    return ret
+
+def setpal(port, addr, allmem):
+    assert len(allmem) != 0, "setpal: numbytes should be non-zero"
+    start = 0
+    end = len(allmem)
+    numbytes = end - start
+    while numbytes > 0:
+        chunksize = min(numbytes, 512)
+        mem = allmem[start:(start+chunksize)]
+        ret = setpal_chunk(port, addr, mem)
+        if ret == b'\x00':
+            start = start + chunksize
+            addr = addr + int(chunksize/2)
+            numbytes = end - start
+        else:
+            break
+    return ret
 
 #
 # Develo test command to return an error code

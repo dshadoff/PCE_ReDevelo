@@ -394,6 +394,54 @@ int i;
   Serial.flush();
 }
 
+void serial_exec() {
+int retcode;
+unsigned char buf[1024];
+int addr_h, addr_l;
+int addr;
+int i;
+
+  while (!Serial.available());    // need to wait for data to be available
+  addr_h = Serial.read();
+  while (!Serial.available());    // need to wait for data to be available
+  addr_l = Serial.read();
+
+  addr = (addr_h << 8) + addr_l;
+
+  retcode = dv_exec(addr, 0);
+  Serial.write(retcode);
+  Serial.flush();
+}
+
+void serial_getCDsector() {
+int retcode;
+unsigned char buf[3072];
+int sector_h, sector_m, sector_l;
+int sector;
+int i;
+
+  while (!Serial.available());    // need to wait for data to be available
+  sector_h = Serial.read();
+  while (!Serial.available());    // need to wait for data to be available
+  sector_m = Serial.read();
+  while (!Serial.available());    // need to wait for data to be available
+  sector_l = Serial.read();
+
+  sector = (sector_h << 16) + (sector_m << 8) + sector_l;
+  
+  retcode = dv_read_cd(buf, sector);
+  if (retcode != DV_OK) {
+    Serial.write(retcode);
+    Serial.flush();
+  }
+  else {
+    Serial.write(retcode);
+    for (i = 0 ; i < 2048; i++) {
+      Serial.write(*(buf+i));
+    }
+    Serial.flush();
+  }
+}
 
 void serial_error() {
     Serial.write(DV_INTERNAL_ERR);
@@ -456,6 +504,18 @@ static bool led_state = LOW;
 
     case 'I':   // set color
         serial_setcolor();
+        led_state = led_state ? LOW : HIGH;
+        digitalWrite(LED_Pin, led_state);
+        break;
+
+    case 'J':   // execute
+        serial_exec();
+        led_state = led_state ? LOW : HIGH;
+        digitalWrite(LED_Pin, led_state);
+        break;
+
+    case 'L':   // read CD sector
+        serial_getCDsector();
         led_state = led_state ? LOW : HIGH;
         digitalWrite(LED_Pin, led_state);
         break;

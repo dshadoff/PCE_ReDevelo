@@ -393,11 +393,26 @@ dv_read_cd(unsigned char *data, int sect)
   buf[5] = 0;
   buf[6] = 0;
   buf[7] = 0;
-  
+
+//  Serial.print("sector: ");
+//  Serial.print(buf[1], HEX);
+//  Serial.print(" ");
+//  Serial.print(buf[2], HEX);
+//  Serial.print(" ");
+//  Serial.println(buf[3], HEX);
+//
+//  Serial.println("send cmd");
+
   if (dv_send_cmd(buf) != DV_OK)
     return (DV_ERR);
+
+//  Serial.println("get ram");
+
+  delay(3000);
   if (dv_get_ram(data, 0x2800, 2048) != DV_OK)
     return (DV_ERR);
+
+//  Serial.println("Should be OK");
 
   return (DV_OK);
 }

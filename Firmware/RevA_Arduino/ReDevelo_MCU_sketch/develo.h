@@ -1,7 +1,6 @@
-
-/* path separator */
-#define PATH_SEPARATOR '/'
-#define PATH_SEPARATOR_STRING "/"
+//
+// Develo.h : header for common develo functions/definitions
+//
 
 /* command status */
 #define DV_OK			 0
@@ -9,9 +8,11 @@
 #define DV_CRC_ERR		-2          //  comes back as 0xFE
 #define DV_TIMEOUT_ERR	-3        //  comes back as 0xFD
 #define DV_INTERNAL_ERR	-99       //  comes back as 0x9D
+
 #define DV_CMD  0
 #define DV_SEND 1
 #define DV_RECV 2
+
 #define DV_ACK  0x06
 #define DV_NAK  0x15
 

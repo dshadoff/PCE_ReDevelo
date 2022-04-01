@@ -8,10 +8,13 @@
 
 
 #include <Arduino.h>
-#include <SD.h>
 #include "crc16.h"
 #include "develo.h"
 
+//
+// Note: Porting to a different board will require some changes to the
+//       below pin/port defeinitions (and possibly where they are referenced)
+//
 #define DELAY_MICROS  1
 
 #define IN_PORT            REG_PORT_IN0
@@ -45,14 +48,11 @@ const int LED_Pin     = 8;   // green LED
 // ERROR.C
 // INIT.C
 // COMMAND.C
-// 
-// MAKE MINOR CORRECTIONS (TODO) TO:  (kbhit & delay timing)
 // XFER.C
 //
 // NEXT UP:
 // --------
 // SLAVE.C
-// GETROM.C
 // PERUN.C
 // MX.C
 // EXECMX.C
@@ -60,9 +60,8 @@ const int LED_Pin     = 8;   // green LED
 
 int develo = 1;      /* develo box presence flag */
 
-
 int develo_wait1 = 20000; /* timeout retries */
-int develo_wait2 = 20000;
+int develo_wait2 = 20000; /* may be unused) */
 int develo_error; /* latest error */
 int develo_status;  /* transfer status */
 int slave_mode;
@@ -381,14 +380,15 @@ dv_exec(int addr, int slave)
  */
 
 int
-dv_read_cd(unsigned char *data, int sect)
+dv_read_cd(unsigned char *data, int sector)
 {
   unsigned char buf[8];
+  int i;
 
   buf[0] = 12;
-  buf[1] = (sect & 0xFF0000) >> 16;
-  buf[2] = (sect & 0x00FF00) >> 8;
-  buf[3] = (sect & 0x0000FF);
+  buf[1] = (sector & 0xFF0000) >> 16;
+  buf[2] = (sector & 0x00FF00) >> 8;
+  buf[3] = (sector & 0x0000FF);
   buf[4] = 0;
   buf[5] = 0;
   buf[6] = 0;
@@ -408,8 +408,20 @@ dv_read_cd(unsigned char *data, int sect)
 
 //  Serial.println("get ram");
 
-  delay(3000);
-  if (dv_get_ram(data, 0x2800, 2048) != DV_OK)
+// The above command to fetch a sector may take a long time, including
+// head seek, focus, and read, and the PC Engine will be unresponsive
+// during that time, so we need to retry.
+//
+// Since there is significant variability in head seek (8ms to ~2 seconds),
+// we will do this with a variable delay-timeout technique
+//
+  for (i = 0; i < 30; i++) {
+    delay(100);
+    if (dv_get_ram(data, 0x2800, 2048) == DV_OK)
+      break;
+  }
+
+  if (i == 30)
     return (DV_ERR);
 
 //  Serial.println("Should be OK");
@@ -810,21 +822,14 @@ dv_recv_byte(void)
  * dv_output()
  * ----
  */
-////////////////////////////////////////////////////////////////
-//TODO: Fix OUTPUT PORT (DONE)
-////////////////////////////////////////////////////////////////
 
 static void
 dv_output(int data)
 {
   static int old = 0;
 
-//  outportb(develo_lpt, (data & 0x07) | (old & 0x08));
-
   write_PCE_port((data & 0x07) | (old & 0x08));
   dv_delay();
-
-//  outportb(develo_lpt, (data & 0x0F));
 
   write_PCE_port((data & 0x0F));
   old = data;
@@ -859,9 +864,6 @@ dv_output_and_wait(int c, int val)
  * dv_input()
  * ----
  */
-////////////////////////////////////////////////////////////////
-//TODO: Fix INPUT PORT  (DONE)
-////////////////////////////////////////////////////////////////
 
 static int
 dv_input(void)
@@ -869,13 +871,12 @@ dv_input(void)
   int c;
 
     /* develo input port */
-//  switch (inportb(develo_com + 6) & 0xC0) {
   switch (read_PCE_port() & 0xC0) {
-//    case 0x00: c = 0x03; break;
+//    case 0x00: c = 0x03; break;   // This was how MagicKit had it, but that seems to be incorrect
     case 0x00: c = 0x00; break;
     case 0x40: c = 0x01; break;
     case 0x80: c = 0x02; break;
-//    default:   c = 0x00; break;
+//    default:   c = 0x00; break;   // This was how MagicKit had it, but that seems to be incorrect
     default:   c = 0x03; break;
   }
 
@@ -883,6 +884,10 @@ dv_input(void)
   return (c);
 }
 
+//
+// Note: Porting to different board will require changes
+//       to these two functions
+//
 void
 write_PCE_port(int value)
 {
@@ -930,14 +935,9 @@ read_PCE_port(void)
  * dv_delay()
  * ----
  */
-////////////////////////////////////////////////////////////////
-//TODO: Adjust timing  (DONE)
-////////////////////////////////////////////////////////////////
-
 static void
 dv_delay(void)
 {
-
     delayMicroseconds(DELAY_MICROS);
 }
 

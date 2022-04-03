@@ -1,3 +1,7 @@
+# redev_getbank
+#
+# Fetch the current MMR bank settings from the PC Engine and display them
+#
 import sys
 import os
 import serial

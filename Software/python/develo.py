@@ -1,3 +1,6 @@
+# Develo library for communication with the
+# "ReDevelo" box and the PC Engine
+#
 import os
 
 #

@@ -1,3 +1,6 @@
+# Hextools library for dealing with hexadecimal values
+# and strings (used by Develo library and the Develo utility programs)
+# 
 def hexdump(memory, baseaddr = 'nul'):
     count = 0
     for x in memory:

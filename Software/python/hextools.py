@@ -1,6 +1,22 @@
 # Hextools library for dealing with hexadecimal values
 # and strings (used by Develo library and the Develo utility programs)
 # 
+def hexdecode(input):
+    hexadecimal = 0
+    num = 0
+    if input[0] == "$":
+        hexadecimal = 1
+        hexnum = input[1:]
+    elif input[0:2] == "0x" or input[0:2] == "0X":
+        hexadecimal = 1
+        hexnum = input[2:]
+
+    if hexadecimal == 1:
+        num = int(hexnum, 16)
+    else:
+        num = int(input)
+    return num
+
 def hexdump(memory, baseaddr = 'nul'):
     count = 0
     for x in memory:

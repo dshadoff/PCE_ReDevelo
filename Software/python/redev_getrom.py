@@ -1,3 +1,8 @@
+# redev_getrom <filename>
+#
+# Read the CD System ROM (banks $00 through $1F) from the
+# PC Engine via ReDevelo system, and save it to <filename>
+#
 import sys
 import os
 import serial
@@ -16,11 +21,18 @@ if len(sys.argv) <= 1:
 
 f = open(sys.argv[1], "wb")
 
+#
+# save the intiial value of MMR #4 (address $8000-$9FFF)
+#
 ret, data = develo.getbank(ser)
 develo.chkret(ret, "initial getbank")
 
 savebank = data[4]
 
+#
+# Iterate through banks $00 through $1F, fetching
+# data and save it to the file
+#
 banknum = 0
 while (banknum < 32):
     print("Fetching Bank ",end='')
@@ -34,7 +46,9 @@ while (banknum < 32):
     f.write(data2)
 
     banknum = banknum + 1
-
+#
+# restore the original value of MMR #4 (address $8000-$9FFF)
+#
 ret = develo.setbank(ser, 4, savebank)
 develo.chkret(ret, "setbank (revert)")
 

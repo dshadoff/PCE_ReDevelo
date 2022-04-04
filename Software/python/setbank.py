@@ -1,4 +1,4 @@
-# redev_setbank <page number> <bank number>
+# setbank <page number> <bank number>
 #
 # Set an MMR bank value on the PC Engine
 # Example: redev_setbank 4 0x86
@@ -9,13 +9,10 @@ import serial
 import develo
 from hextools import *
 
-comport = develo.get_portnum()
-print("Using serial port: ", comport)
-
 if len(sys.argv) <= 2:
     print()
     print("Bad paramaters entered")
-    print("Usage: redev_setbank <page number> <bank number>")
+    print("Usage: setbank <page number> <bank number>")
     exit()
 
 error = 0
@@ -26,19 +23,22 @@ if sys.argv[1].isnumeric():
 else:
     error = 1
 
+comport = develo.get_portnum()
+print("Using serial port: ", comport)
+print()
+
 bank = hexdecode(sys.argv[2])
 
 if error == 1:
     print()
     print("Bad paramaters entered")
-    print("Usage: redev_setbank <page number> <bank number>")
+    print("Usage: setbank <page number> <bank number>")
     exit()
 
-ser = serial.Serial(comport, 19200, timeout=0.5)
+ser = develo.open(comport)
 
-ret, data = develo.setbank(ser, page, bank)
+ret = develo.setbank(ser, page, bank)
 develo.chkret(ret, "setbank")
-hexdump(data)
 
-ser.close()
+develo.close(ser)
 

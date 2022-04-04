@@ -2,6 +2,7 @@
 # "ReDevelo" box and the PC Engine
 #
 import os
+import serial
 
 #
 # Grab Develo's COM port from the environment variable
@@ -10,6 +11,23 @@ def get_portnum():
     if 'DEVELO_PORT' not in os.environ:
         sys.exit("DEVELO_PORT not defined")
     return os.environ.get('DEVELO_PORT')
+
+#
+# Open Develo's COM port
+#
+def open(comport):
+    try:
+        ser = serial.Serial(comport, 19200, timeout=1)
+    except:
+        print("Couldn't open serial port", comport)
+        exit(1)
+    return ser
+
+#
+# Close Develo's COM port
+#
+def close(port):
+    port.close
 
 #
 # Just print out any response information from the

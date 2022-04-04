@@ -1,4 +1,4 @@
-# redev_getrom <filename>
+# getrom <filename>
 #
 # Read the CD System ROM (banks $00 through $1F) from the
 # PC Engine via ReDevelo system, and save it to <filename>
@@ -9,15 +9,17 @@ import serial
 import develo
 from hextools import *
 
-comport = develo.get_portnum()
-print("Using serial port: ", comport)
-ser = serial.Serial(comport, 19200, timeout=1)
-
 if len(sys.argv) <= 1:
     print()
     print("no filename entered")
-    print("Usage: redev_getrom <filename>")
+    print("Usage: getrom <filename>")
     exit()
+
+comport = develo.get_portnum()
+print("Using serial port: ", comport)
+print()
+
+ser = develo.open(comport)
 
 f = open(sys.argv[1], "wb")
 
@@ -53,5 +55,5 @@ ret = develo.setbank(ser, 4, savebank)
 develo.chkret(ret, "setbank (revert)")
 
 f.close()
-ser.close()
+develo.close(ser)
 

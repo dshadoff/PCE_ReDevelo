@@ -1,4 +1,4 @@
-# redev_getbank
+# getbank
 #
 # Fetch the current MMR bank settings from the PC Engine and display them
 #
@@ -9,13 +9,14 @@ import develo
 from hextools import *
 
 comport = develo.get_portnum()
-print("Using serial port: ", comport)
+print("Using serial port:", comport)
+print()
 
-ser = serial.Serial(comport, 19200, timeout=0.5)
+ser = develo.open(comport)
 
 ret, data = develo.getbank(ser)
 develo.chkret(ret, "getbank")
 hexdump(data)
 
-ser.close()
+develo.close(ser)
 

@@ -17,12 +17,12 @@ if len(sys.argv) <= 1:
 
 error = 0
 
-bank = hexdecode(sys.argv[1])
+addr = hexdecode(sys.argv[1])
 
 if error == 1:
     print()
     print("Bad paramaters entered")
-    print("Usage: setbank <page number> <bank number>")
+    print("Usage: execute <address>")
     exit()
 
 comport = develo.get_portnum()
@@ -30,8 +30,6 @@ print("Using serial port:", comport)
 print()
 
 ser = develo.open(comport)
-
-addr =0x4000
 
 ret = develo.exec(ser, addr)
 develo.chkret(ret, "execute")

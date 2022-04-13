@@ -41,13 +41,20 @@ print()
 
 ser = develo.open(comport)
 
+endofdir = 0
 for sector in range (2, 66):
     ret, data = develo.getsector(ser, sector)
     develo.chkret(ret, "getsector")
 
     for ind in range(0,64):
         entry = data[ind*32:(ind*32+32)]
-        if entry[0] != 0x00:
+        if entry[0] == 0x00:
+            endofdir = 1
+            break
+        else:
             showdir(entry)
+
+    if endofdir == 1:
+        break
 develo.close(ser)
 

@@ -17,22 +17,6 @@
 #include "develo.h"
 
 
-// I/Os - these are the Arduino pin numbers
-const int clrPin      = 13;  // CLR signal from PCE (Develo) (CLR)
-const int selPin      = 12;  // SEL signal from PCE (Develo) (SEL)
-
-const int d3_Pin      = 11;  // data 3 to PCE
-const int d2_Pin      = 10;  // data 2 to PCE
-const int d1_Pin      = 6;   // data 1 to PCE
-const int d0_Pin      = 5;   // data 0 to PCE
-
-const int LED_Pin     = 8;   // green LED
-//const int TriggerPin  = 1;   // trigger pin
-
-
-bool modeMonitor;
-
-
 void setup()
 {
   int i;
@@ -64,7 +48,7 @@ void setup()
   delay(4000);  // wait for startup period
 
 
-//  Serial.println("Initializing Develo...");
+  Serial.println("Initializing Develo...");
   if (dv_init() != DV_OK) {
     Serial.println("Can not initialize the ReDevelo box!");
 //    exit(1);
